@@ -173,6 +173,7 @@ static sensorsim_state_t m_rr_interval_sim_state;                   /**< RR Inte
 static ble_uuid_t m_adv_uuids[] =                                   /**< Universally unique service identifiers. */
 {
     {BLE_UUID_HEART_RATE_SERVICE,           BLE_UUID_TYPE_BLE},
+    {BLE_UUID_HEALTH_THERMOMETER_SERVICE, 	BLE_UUID_TYPE_BLE},
     {BLE_UUID_BATTERY_SERVICE,              BLE_UUID_TYPE_BLE},
     {BLE_UUID_DEVICE_INFORMATION_SERVICE,   BLE_UUID_TYPE_BLE}
 };
@@ -480,6 +481,7 @@ static void gap_params_init(void)
 
     err_code = sd_ble_gap_appearance_set(BLE_APPEARANCE_GENERIC_THERMOMETER);
     APP_ERROR_CHECK(err_code);
+
     err_code = sd_ble_gap_appearance_set(BLE_APPEARANCE_HEART_RATE_SENSOR_HEART_RATE_BELT);
     APP_ERROR_CHECK(err_code);
 
@@ -514,7 +516,10 @@ static void gatt_evt_handler(nrf_ble_gatt_t * p_gatt, nrf_ble_gatt_evt_t const *
  */
 static void gatt_init(void)
 {
-    ret_code_t err_code = nrf_ble_gatt_init(&m_gatt, gatt_evt_handler);
+    ret_code_t err_code;
+    err_code = nrf_ble_gatt_init(&m_gatt, NULL);
+    APP_ERROR_CHECK(err_code);
+    err_code = nrf_ble_gatt_init(&m_gatt, gatt_evt_handler);
     APP_ERROR_CHECK(err_code);
 }
 
@@ -639,7 +644,8 @@ static void services_init(void)
 
     err_code = ble_hrs_init(&m_hrs, &hrs_init);
     APP_ERROR_CHECK(err_code);
-	err_code = ble_hts_init(&m_hts, &hts_init);
+
+    err_code = ble_hts_init(&m_hts, &hts_init);
     APP_ERROR_CHECK(err_code);
 
     // Initialize Battery Service.
