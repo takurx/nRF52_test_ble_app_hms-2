@@ -96,10 +96,16 @@
 #define APP_BLE_CONN_CFG_TAG                1                                       /**< A tag identifying the SoftDevice BLE configuration. */
 #define APP_BLE_OBSERVER_PRIO               3                                       /**< Application's BLE observer priority. You shouldn't need to modify this value. */
 
-#define BATTERY_LEVEL_MEAS_INTERVAL         APP_TIMER_TICKS(2000)                   /**< Battery level measurement interval (ticks). */
-#define MIN_BATTERY_LEVEL                   81                                      /**< Minimum simulated battery level. */
-#define MAX_BATTERY_LEVEL                   100                                     /**< Maximum simulated 7battery level. */
-#define BATTERY_LEVEL_INCREMENT             1                                       /**< Increment between each simulated battery level measurement. */
+#define BATTERY_LEVEL_MEAS_INTERVAL     APP_TIMER_TICKS(2000)                       /**< Battery level measurement interval (ticks). */
+#define MIN_BATTERY_LEVEL               81                                          /**< Minimum battery level as returned by the simulated measurement function. */
+#define MAX_BATTERY_LEVEL               100                                         /**< Maximum battery level as returned by the simulated measurement function. */
+#define BATTERY_LEVEL_INCREMENT         1                                           /**< Value by which the battery level is incremented/decremented for each call to the simulated measurement function. */
+
+#define TEMP_TYPE_AS_CHARACTERISTIC     0                                           /**< Determines if temperature type is given as characteristic (1) or as a field of measurement (0). */
+
+#define MIN_CELCIUS_DEGREES             3688                                        /**< Minimum temperature in celcius for use in the simulated measurement function (multiplied by 100 to avoid floating point arithmetic). */
+#define MAX_CELCIUS_DEGRESS             3972                                        /**< Maximum temperature in celcius for use in the simulated measurement function (multiplied by 100 to avoid floating point arithmetic). */
+#define CELCIUS_DEGREES_INCREMENT       36                                          /**< Value by which temperature is incremented/decremented for each call to the simulated measurement function (multiplied by 100 to avoid floating point arithmetic). */
 
 #define HEART_RATE_MEAS_INTERVAL            APP_TIMER_TICKS(1000)                   /**< Heart rate measurement interval (ticks). */
 #define MIN_HEART_RATE                      140                                     /**< Minimum heart rate as returned by the simulated measurement function. */
@@ -136,6 +142,7 @@
 #define DEAD_BEEF                           0xDEADBEEF                              /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
 
+BLE_HTS_DEF(m_hts);                                                                 /**< Structure used to identify the health thermometer service. */
 BLE_HRS_DEF(m_hrs);                                                 /**< Heart rate service instance. */
 BLE_BAS_DEF(m_bas);                                                 /**< Structure used to identify the battery service. */
 NRF_BLE_GATT_DEF(m_gatt);                                           /**< GATT module instance. */
@@ -146,9 +153,16 @@ APP_TIMER_DEF(m_heart_rate_timer_id);                               /**< Heart r
 APP_TIMER_DEF(m_rr_interval_timer_id);                              /**< RR interval timer. */
 APP_TIMER_DEF(m_sensor_contact_timer_id);                           /**< Sensor contact detected timer. */
 
-static uint16_t m_conn_handle         = BLE_CONN_HANDLE_INVALID;    /**< Handle of the current connection. */
+static uint16_t          m_conn_handle = BLE_CONN_HANDLE_INVALID;                   /**< Handle of the current connection. */
+static bool              m_hts_meas_ind_conf_pending = false;                       /**< Flag to keep track of when an indication confirmation is pending. */
+static sensorsim_cfg_t   m_battery_sim_cfg;                                         /**< Battery Level sensor simulator configuration. */
+static sensorsim_state_t m_battery_sim_state;                                       /**< Battery Level sensor simulator state. */
+static sensorsim_cfg_t   m_temp_celcius_sim_cfg;                                    /**< Temperature simulator configuration. */
+static sensorsim_state_t m_temp_celcius_sim_state;                                  /**< Temperature simulator state. */
 static bool     m_rr_interval_enabled = true;                       /**< Flag for enabling and disabling the registration of new RR interval measurements (the purpose of disabling this is just to test sending HRM without RR interval data. */
 
+static void advertising_start(bool erase_bonds);
+static void temperature_measurement_send(void);
 static sensorsim_cfg_t   m_battery_sim_cfg;                         /**< Battery Level sensor simulator configuration. */
 static sensorsim_state_t m_battery_sim_state;                       /**< Battery Level sensor simulator state. */
 static sensorsim_cfg_t   m_heart_rate_sim_cfg;                      /**< Heart Rate sensor simulator configuration. */
@@ -234,8 +248,7 @@ static void pm_evt_handler(pm_evt_t const * p_evt)
 }
 
 
-/**@brief Function for performing battery measurement and updating the Battery Level characteristic
- *        in Battery Service.
+/**@brief Function for performing a battery measurement, and update the Battery Level characteristic in the Battery Service.
  */
 static void battery_level_update(void)
 {
@@ -261,8 +274,8 @@ static void battery_level_update(void)
  *
  * @details This function will be called each time the battery level measurement timer expires.
  *
- * @param[in] p_context  Pointer used for passing some arbitrary information (context) from the
- *                       app_start_timer() call to the timeout handler.
+ * @param[in] p_context   Pointer used for passing some arbitrary information (context) from the
+ *                        app_start_timer() call to the timeout handler.
  */
 static void battery_level_meas_timeout_handler(void * p_context)
 {
@@ -413,7 +426,7 @@ static void gap_params_init(void)
 
     err_code = sd_ble_gap_device_name_set(&sec_mode,
                                           (const uint8_t *)DEVICE_NAME,
-                                          strlen(DEVICE_NAME));
+                                           strlen(DEVICE_NAME));
     APP_ERROR_CHECK(err_code);
 
     err_code = sd_ble_gap_appearance_set(BLE_APPEARANCE_HEART_RATE_SENSOR_HEART_RATE_BELT);
@@ -795,7 +808,7 @@ static void ble_stack_init(void)
  *
  * @param[in]   event   Event generated by button press.
  */
-void bsp_event_handler(bsp_event_t event)
+static void bsp_event_handler(bsp_event_t event)
 {
     ret_code_t err_code;
 
@@ -866,6 +879,9 @@ static void peer_manager_init(void)
 
 
 /**@brief Function for initializing the Advertising functionality.
+ *
+ * @details Encodes the required advertising data and passes it to the stack.
+ *          Also builds a structure to be passed to the stack when starting advertising.
  */
 static void advertising_init(void)
 {
@@ -972,6 +988,7 @@ int main(void)
     peer_manager_init();
 
     // Start execution.
+    NRF_LOG_INFO("Health Thermometer example started.");
     NRF_LOG_INFO("Heart Rate Sensor example started.");
     application_timers_start();
     advertising_start(erase_bonds);
