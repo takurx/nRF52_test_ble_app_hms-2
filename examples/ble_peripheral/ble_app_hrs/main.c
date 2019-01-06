@@ -59,22 +59,23 @@
 #include "ble_advdata.h"
 #include "ble_advertising.h"
 #include "ble_bas.h"
+#include "ble_hts.h"
 #include "ble_hrs.h"
 #include "ble_dis.h"
 #include "ble_conn_params.h"
 #include "sensorsim.h"
 #include "nrf_sdh.h"
-#include "nrf_sdh_ble.h"
 #include "nrf_sdh_soc.h"
+#include "nrf_sdh_ble.h"
 #include "app_timer.h"
-#include "bsp_btn_ble.h"
 #include "peer_manager.h"
 #include "peer_manager_handler.h"
+#include "bsp_btn_ble.h"
 #include "fds.h"
+#include "ble_conn_state.h"
 #include "nrf_ble_gatt.h"
 #include "nrf_ble_lesc.h"
 #include "nrf_ble_qwr.h"
-#include "ble_conn_state.h"
 #include "nrf_pwr_mgmt.h"
 
 #include "nrf_log.h"
@@ -82,8 +83,12 @@
 #include "nrf_log_default_backends.h"
 
 
-#define DEVICE_NAME                         "Nordic_HRM"                            /**< Name of device. Will be included in the advertising data. */
-#define MANUFACTURER_NAME                   "NordicSemiconductor"                   /**< Manufacturer. Will be passed to Device Information Service. */
+#define DEVICE_NAME                         "HMM"		                            /**< Name of device. Will be included in the advertising data. */
+#define MANUFACTURER_NAME                   "SIMULATER"			                    /**< Manufacturer. Will be passed to Device Information Service. */
+#define MODEL_NUM                       "NS-HTS-EXAMPLE"                            /**< Model number. Will be passed to Device Information Service. */
+#define MANUFACTURER_ID                 0x1122334455                                /**< Manufacturer ID, part of System ID. Will be passed to Device Information Service. */
+#define ORG_UNIQUE_ID                   0x667788                                    /**< Organizational Unique ID, part of System ID. Will be passed to Device Information Service. */
+
 #define APP_ADV_INTERVAL                    300                                     /**< The advertising interval (in units of 0.625 ms. This value corresponds to 187.5 ms). */
 
 #define APP_ADV_DURATION                    18000                                   /**< The advertising duration (180 seconds) in units of 10 milliseconds. */
