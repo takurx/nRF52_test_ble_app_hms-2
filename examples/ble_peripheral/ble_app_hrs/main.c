@@ -185,7 +185,7 @@ static sensorsim_state_t m_rr_interval_sim_state;                   /**< RR Inte
 #define UART_TX_BUF_SIZE                256                                         /**< UART TX buffer size. */
 #define UART_RX_BUF_SIZE                256                                         /**< UART RX buffer size. */
 
-//BLE_NUS_DEF(m_nus, NRF_SDH_BLE_TOTAL_LINK_COUNT);                                   /**< BLE NUS service instance. */
+BLE_NUS_DEF(m_nus, NRF_SDH_BLE_TOTAL_LINK_COUNT);                                   /**< BLE NUS service instance. */
 //NRF_BLE_GATT_DEF(m_gatt);                                                           /**< GATT module instance. */
 //NRF_BLE_QWR_DEF(m_qwr);                                                             /**< Context for the Queued Write module.*/
 //BLE_ADVERTISING_DEF(m_advertising);                                                 /**< Advertising module instance. */
