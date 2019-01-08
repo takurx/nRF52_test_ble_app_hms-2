@@ -1299,19 +1299,31 @@ int main(void)
     bool erase_bonds;
 
     // Initialize.
-    uart_init();
+    //uart_init();
     log_init();
+    NRF_LOG_INFO("Finish nrf log info");
     timers_init();
+    NRF_LOG_INFO("Finish timer init");
     buttons_leds_init(&erase_bonds);
+    NRF_LOG_INFO("Finish button led init");
     power_management_init();
+    NRF_LOG_INFO("Finish power management init");
     ble_stack_init();
+    NRF_LOG_INFO("Finish ble stack init");
     gap_params_init();
+    NRF_LOG_INFO("Finish gap param init");
     gatt_init();
+    NRF_LOG_INFO("Finish gatt init");
     advertising_init();
+    NRF_LOG_INFO("Finish advertising init");
     services_init();
+    NRF_LOG_INFO("Finish services init");
     sensor_simulator_init();
+    NRF_LOG_INFO("Finish sesor simulator init");
     conn_params_init();
+    NRF_LOG_INFO("Finish conn params init");
     peer_manager_init();
+    NRF_LOG_INFO("Finish peer manager init");
 
     // Start execution.
     NRF_LOG_INFO("Health Thermometer example started.");
