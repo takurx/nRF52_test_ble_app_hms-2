@@ -228,3 +228,14 @@ examples/ble_peripheral/ble_app_hrs/pca10040/s132/ses/ble_app_hrs_pca10040_s132_
 examples/ble_peripheral/ble_app_hrs/main.c.bak
 examples/ble_peripheral/ble_app_hrs/pca10040/s132/ses/Output/ble_app_hrs_pca10040_s132 Debug/Obj/ble_hts.d
 examples/ble_peripheral/ble_app_hrs/pca10040/s132/ses/Output/ble_app_hrs_pca10040_s132 Debug/Obj/ble_hts.o
+examples/ble_peripheral/ble_app_hrs/pca10040/s132/config/sdk_config.h.bak
+examples/ble_peripheral/ble_app_hrs/pca10040/s132/ses/Output/ble_app_hrs_pca10040_s132 Debug/Obj/app_fifo.d
+examples/ble_peripheral/ble_app_hrs/pca10040/s132/ses/Output/ble_app_hrs_pca10040_s132 Debug/Obj/app_fifo.o
+examples/ble_peripheral/ble_app_hrs/pca10040/s132/ses/Output/ble_app_hrs_pca10040_s132 Debug/Obj/app_uart_fifo.d
+examples/ble_peripheral/ble_app_hrs/pca10040/s132/ses/Output/ble_app_hrs_pca10040_s132 Debug/Obj/app_uart_fifo.o
+examples/ble_peripheral/ble_app_hrs/pca10040/s132/ses/Output/ble_app_hrs_pca10040_s132 Debug/Obj/ble_link_ctx_manager.d
+examples/ble_peripheral/ble_app_hrs/pca10040/s132/ses/Output/ble_app_hrs_pca10040_s132 Debug/Obj/ble_link_ctx_manager.o
+examples/ble_peripheral/ble_app_hrs/pca10040/s132/ses/Output/ble_app_hrs_pca10040_s132 Debug/Obj/ble_nus.d
+examples/ble_peripheral/ble_app_hrs/pca10040/s132/ses/Output/ble_app_hrs_pca10040_s132 Debug/Obj/ble_nus.o
+examples/ble_peripheral/ble_app_hrs/pca10040/s132/ses/Output/ble_app_hrs_pca10040_s132 Debug/Obj/retarget.d
+examples/ble_peripheral/ble_app_hrs/pca10040/s132/ses/Output/ble_app_hrs_pca10040_s132 Debug/Obj/retarget.o
