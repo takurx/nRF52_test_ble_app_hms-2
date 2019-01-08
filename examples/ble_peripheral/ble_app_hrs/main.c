@@ -195,11 +195,11 @@ static uint16_t   m_ble_nus_max_data_len = BLE_GATT_ATT_MTU_DEFAULT - 3;        
 
 static ble_uuid_t m_adv_uuids[] =                                   /**< Universally unique service identifiers. */
 {
-    {BLE_UUID_NUS_SERVICE, NUS_SERVICE_UUID_TYPE},
-    {BLE_UUID_HEART_RATE_SERVICE,           BLE_UUID_TYPE_BLE},
-    {BLE_UUID_HEALTH_THERMOMETER_SERVICE, 	BLE_UUID_TYPE_BLE},
-    {BLE_UUID_BATTERY_SERVICE,              BLE_UUID_TYPE_BLE},
-    {BLE_UUID_DEVICE_INFORMATION_SERVICE,   BLE_UUID_TYPE_BLE}
+    {BLE_UUID_NUS_SERVICE, NUS_SERVICE_UUID_TYPE}
+    //{BLE_UUID_HEART_RATE_SERVICE,           BLE_UUID_TYPE_BLE},
+    //{BLE_UUID_HEALTH_THERMOMETER_SERVICE, 	BLE_UUID_TYPE_BLE},
+    //{BLE_UUID_BATTERY_SERVICE,              BLE_UUID_TYPE_BLE},
+    //{BLE_UUID_DEVICE_INFORMATION_SERVICE,   BLE_UUID_TYPE_BLE}
 };
 
 
