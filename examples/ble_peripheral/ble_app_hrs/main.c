@@ -1130,17 +1130,29 @@ int main(void)
 
     // Initialize.
     log_init();
+    NRF_LOG_INFO("Finish log init");
     timers_init();
+    NRF_LOG_INFO("Finish timers init");
     buttons_leds_init(&erase_bonds);
+    NRF_LOG_INFO("Finish buttons leds init");
     power_management_init();
+    NRF_LOG_INFO("Finish power management init");
     ble_stack_init();
+    NRF_LOG_INFO("Finish ble stack init");
     gap_params_init();
+    NRF_LOG_INFO("Finish gap params init");
     gatt_init();
+    NRF_LOG_INFO("Finish gatt init");
     advertising_init();
+    NRF_LOG_INFO("Finish advertising init");
     services_init();
+    NRF_LOG_INFO("Finish services init");
     sensor_simulator_init();
+    NRF_LOG_INFO("Finish sensor simulator init");
     conn_params_init();
+    NRF_LOG_INFO("Finish conn params init");
     peer_manager_init();
+    NRF_LOG_INFO("Finish peer manager init");
 
     // Start execution.
     NRF_LOG_INFO("Health Thermometer example started.");
